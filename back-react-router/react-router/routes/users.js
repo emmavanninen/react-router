@@ -1,6 +1,5 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-
 
 let users = [
   { id: 1, name: "poop", age: "1 month" },
@@ -8,22 +7,25 @@ let users = [
   { id: 3, name: "Toivo", age: "almost 4 yo" }
 ];
 
-
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('poop');
+router.get("/", function(req, res, next) {
+  res.send("poop");
 });
 
-router.get('/get-all-users', function(req, res) {
+router.get("/get-all-users", function(req, res) {
   res.json(users);
 });
 
-router.get('/get-user-by-id/:id', function(req, res) {
-    let userID = req.params.id
-    let foundUser = users.filter(user => user.id == userID)
-    
-    res.json(foundUser)
+router.get("/get-user-by-id/:id", function(req, res) {
+  let userID = req.params.id;
+  let foundUser = users.filter(user => user.id == userID);
 
+  if (foundUser.length) {
+    res.json(foundUser);
+  } else {
+      //! error status goes directly to catch block on axios
+    res.status(404).send("User Not Found");
+  }
 });
 
 module.exports = router;

@@ -4,7 +4,9 @@ import Axios from "axios";
 export default class User extends Component {
   state = {
     user: {},
-    isLoading: true
+    isLoading: true,
+    isError: false,
+    errMsg: ""
   };
 
   async componentDidMount() {
@@ -17,9 +19,14 @@ export default class User extends Component {
         user: dataArr[0],
         isLoading: false
       });
-      
     } catch (e) {
-      console.log(e);
+      this.setState({
+        isError: true,
+        errMsg: e.response.data,
+        isLoading: false
+      });
+      // ! getting error status msg, use .response
+      console.log(e.response);
     }
   }
 
@@ -31,6 +38,8 @@ export default class User extends Component {
       <div>
         {this.state.isLoading ? (
           <h2>...loading</h2>
+        ) : this.state.isError ? (
+          <h2>{this.state.errMsg}</h2>
         ) : (
           <>
             <h2>name: {this.state.user.name}</h2>
