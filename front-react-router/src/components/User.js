@@ -3,15 +3,21 @@ import Axios from "axios";
 
 export default class User extends Component {
   state = {
-    user: {}
+    user: {},
+    isLoading: true
   };
 
   async componentDidMount() {
     try {
       let success = await Axios.get(
-        `http://localshost:3001/users//get-user-by-id/${this.props.match.params.id}`
+        `http://localhost:3001/users/get-user-by-id/${this.props.match.params.id}`
       );
-      console.log(success);
+      let dataArr = success.data;
+      this.setState({
+        user: dataArr[0],
+        isLoading: false
+      });
+      
     } catch (e) {
       console.log(e);
     }
@@ -23,8 +29,16 @@ export default class User extends Component {
 
     return (
       <div>
+        {this.state.isLoading ? (
+          <h2>...loading</h2>
+        ) : (
+          <>
+            <h2>name: {this.state.user.name}</h2>
+            <h2>ID: {this.state.user.id}</h2>
+          </>
+        )}
         {/* //! props.match matches with the slug */}
-        <h2>User: {this.props.match.params.id}</h2>
+        {/* <h2>User: {this.props.match.params.id}</h2> */}
         {/* <h2>Name: {this.props.location.state.name}</h2> */}
       </div>
     );
